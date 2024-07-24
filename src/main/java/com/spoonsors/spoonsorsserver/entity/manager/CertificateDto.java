@@ -1,6 +1,5 @@
 package com.spoonsors.spoonsorsserver.entity.manager;
 
-import com.spoonsors.spoonsorsserver.entity.BMember;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,5 +20,5 @@ public class CertificateDto {
 
     private String bMember_certificate;
 
-    private int is_verified;
+    private boolean is_verified;
 }

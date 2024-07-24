@@ -5,15 +5,17 @@ import com.spoonsors.spoonsorsserver.entity.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class BMemberSignUpDto {
 
     @NotBlank(message = "아이디를 입력해주세요")
@@ -29,7 +31,7 @@ public class BMemberSignUpDto {
     private String name;
 
     @NotBlank(message = "생년월일을 입력해주세요.(예:20010904)")
-    private String birth;
+    private LocalDate birth;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(min=2, message = "2글자 이상으로 입력해주세요.")
@@ -46,24 +48,21 @@ public class BMemberSignUpDto {
 
     private String profilePath;
 
-
-    @Builder
-    public BMember toEntity(){
+    public BMember toEntity() {
         return BMember.builder()
-                .bMember_id(id)
-                .bMember_pwd(pwd)
-                .bMember_name(name)
-                .bMember_birth(birth)
-                .bMember_nickname(nickname)
-                .bMember_phoneNumber(phoneNumber)
-                .bMember_address(address)
-                .bMember_certificate(certificate)
-                .role(Role.BMEMBER)
+                .memberId(id)
+                .memberPw(pwd)
+                .memberName(name)
+                .bMemberBirth(birth)
+                .memberNickname(nickname)
+                .memberPhoneNumber(phoneNumber)
+                .bMemberAddress(address)
+                .bMemberCertificate(certificate)
+                .role(Role.ROLE_BMEMBER)
                 .token(token)
-                .profile_path(profilePath)
-                .is_verified(0)
-                .can_post(0)
-                .profile_path(profilePath)
+                .profilePath(profilePath)
+                .isVerified(false)
+                .canPost(false)
                 .build();
     }
 }

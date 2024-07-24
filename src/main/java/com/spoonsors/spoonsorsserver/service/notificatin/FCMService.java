@@ -14,8 +14,6 @@ import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.ISponRepository;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -41,22 +39,22 @@ public class FCMService {
 
         if(state.equals("매칭")){ //target token = 자립 준비 청년 토큰, targetId: 자립 준비 청년 아이디
             Optional<SMember> optionalSMember = isMemberRepository.findById(targetId);
-            String targetNickname = optionalSMember.get().getSMember_nickname();
+            String targetNickname = optionalSMember.get().getMemberNickname();
 
             Optional<Spon> optionalSpon = iSponRepository.findById(postOrSponId);
             Spon spon = optionalSpon.get();
 
-            postId=spon.getPost().getPost_id();
+            postId=spon.getPost().getPostId();
 
             title="후원 매칭!";
-            body= targetNickname + "님이 ["+spon.getPost().getPost_title()+"]에 있는 "+spon.getIngredients().getIngredients_name()+"를 보냈어요! ";
+            body= targetNickname + "님이 ["+spon.getPost().getPostTitle()+"]에 있는 "+spon.getIngredients().getIngredientsName()+"를 보냈어요! ";
 
         }else if(state.equals("리뷰 등록")){
             Optional<Post> optionalSpon = iPostRepository.findById(postOrSponId);
             Post post = optionalSpon.get();
-            postId=post.getPost_id();
+            postId=post.getPostId();
             title="리뷰 등록!";
-            body=post.getBMember().getBMember_nickname()+"님이 후원 감사 리뷰를 보냈어요. 지금 확인해 보세요!";
+            body=post.getWriter().getMemberNickname()+"님이 후원 감사 리뷰를 보냈어요. 지금 확인해 보세요!";
         }else{
             throw new ApiException(ExceptionEnum.PUSH01);
         }

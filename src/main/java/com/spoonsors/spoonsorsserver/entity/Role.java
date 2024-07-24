@@ -1,5 +1,7 @@
 package com.spoonsors.spoonsorsserver.entity;
 
 public enum Role {
-    SMEMBER, BMEMBER, ADMIN, NUTRITIONIST
+    ROLE_SMEMBER,
+    ROLE_BMEMBER,
+    ROLE_ADMIN
 }

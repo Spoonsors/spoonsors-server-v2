@@ -1,32 +1,31 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
+import lombok.experimental.SuperBuilder;
 
 
 @ToString
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class Ingredients {
+public class Ingredients extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
-    @Column(nullable = false)
-    private Long ingredients_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ingredients_id", nullable = false)
+    private Long ingredientsId;
 
-    @Column(length = 100, nullable = false, unique = true)
-    private String ingredients_name;
+    @Column(name = "ingredients_name", nullable = false, length = 100, unique = true)
+    private String ingredientsName;
 
-    @Column(length = 100)
-    private String product_name;
+    @Column(name = "product_name", length = 100)
+    private String productName;
 
-    @Column(columnDefinition = "TEXT")
-    private String ingredients_image;
+    @Column(name = "ingredients_image", columnDefinition = "TEXT")
+    private String ingredientsImage;
 
-    @Column(nullable = false)
-    private Integer price;
+    @Column(name = "price", nullable = false)
+    private int price;
 }

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class ManagerService {
             throw new ApiException(ExceptionEnum.MANAGER01);
         }
         Ingredients addIngredientItem = iManagerRepository.save(ingredientsDto.toEntity());
-        addIngredientItem.setIngredients_image(img);
+        addIngredientItem.setIngredientsImage(img);
         return addIngredientItem;
     }
 
@@ -58,13 +57,13 @@ public class ManagerService {
     //식재료 수정
     public Ingredients update( Long ingredients_id,  IngredientsDto ingredientsDto, String img){
 
-        Ingredients updateIngredient  = new Ingredients();
-        updateIngredient.setIngredients_id(ingredients_id);
-        updateIngredient.setIngredients_name(ingredientsDto.getIngredientsName());
-        updateIngredient.setProduct_name(ingredientsDto.getProductName());
-        updateIngredient.setPrice(ingredientsDto.getPrice());
-
-        updateIngredient.setIngredients_image(img);
+        Ingredients updateIngredient  = Ingredients.builder()
+                .ingredientsId(ingredients_id)
+                .ingredientsImage(img)
+                .ingredientsName(ingredientsDto.getIngredientsName())
+                .productName(ingredientsDto.getProductName())
+                .price(ingredientsDto.getPrice())
+                .build();
 
         return iIngredientsRepository.save(updateIngredient);
     }
@@ -84,13 +83,13 @@ public class ManagerService {
         List<CertificateDto> certificateDtos = new ArrayList<>();
         for(BMember b : bMember){
             CertificateDto certificateDto = new CertificateDto();
-            certificateDto.setBMember_id(b.getBMember_id());
-            certificateDto.setBMember_name(b.getBMember_name());
-            certificateDto.setBMember_birth(b.getBMember_birth());
-            certificateDto.setBMember_phoneNumber(b.getBMember_phoneNumber());
-            certificateDto.setBMember_address(b.getBMember_address());
-            certificateDto.setBMember_certificate(b.getBMember_certificate());
-            certificateDto.setIs_verified(b.getIs_verified());
+            certificateDto.setBMember_id(b.getMemberId());
+            certificateDto.setBMember_name(b.getMemberName());
+            certificateDto.setBMember_birth(b.getBMemberBirth().toString());
+            certificateDto.setBMember_phoneNumber(b.getMemberPhoneNumber());
+            certificateDto.setBMember_address(b.getBMemberAddress());
+            certificateDto.setBMember_certificate(b.getBMemberCertificate());
+            certificateDto.set_verified(b.isVerified());
             certificateDtos.add(certificateDto);
         }
         return certificateDtos;

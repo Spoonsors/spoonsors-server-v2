@@ -2,7 +2,10 @@ package com.spoonsors.spoonsorsserver.service.member;
 
 import com.spoonsors.spoonsorsserver.customException.ApiException;
 import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
-import com.spoonsors.spoonsorsserver.entity.*;
+import com.spoonsors.spoonsorsserver.entity.BMember;
+import com.spoonsors.spoonsorsserver.entity.Post;
+import com.spoonsors.spoonsorsserver.entity.Review;
+import com.spoonsors.spoonsorsserver.entity.Spon;
 import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
 import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
 import com.spoonsors.spoonsorsserver.repository.*;
@@ -12,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,17 +32,17 @@ public class PostService {
     private final SponRepository sponRepository;
     //글 작성
     public Post writePost(String bMemberId, WritePostDto writePostDto) {
-        if(ibMemberRepository.findById(bMemberId).get().getIs_verified() == 0){
+        if(!ibMemberRepository.findById(bMemberId).get().isVerified()){
             throw new ApiException(ExceptionEnum.POST01);
         }
-        if(ibMemberRepository.findById(bMemberId).get().getCan_post() == 0) {
+        if(!ibMemberRepository.findById(bMemberId).get().isCanPost()) {
             throw new ApiException(ExceptionEnum.POST02); //후원 등록 가능 상태가 아님
         }
-        Date date = new Date();
+
         Optional<BMember> optionalBMember = ibMemberRepository.findById(bMemberId);
         BMember bMember = optionalBMember.get();
         writePostDto.setBMember(bMember);
-        writePostDto.setPost_date(date);
+        writePostDto.setPost_date(LocalDate.now());
         postRepository.canPost(bMemberId);
         //글 저장
         Post post = iPostRepository.save(writePostDto.toEntity());
@@ -60,8 +63,8 @@ public class PostService {
         Post post=optionalPost.get();
         ViewPostDto viewPostDto = new ViewPostDto();
         viewPostDto.setPost(post);
-        if(post.getHas_review()==1){
-            Optional<Review> optionalReview=iReviewRepository.findById(post.getPost_id());
+        if(post.isHasReview()){
+            Optional<Review> optionalReview=iReviewRepository.findById(post.getPostId());
             Review review = optionalReview.get();
             viewPostDto.setReview(review);
         }
@@ -79,7 +82,7 @@ public class PostService {
     public String changePostState(Long post_id) {
         boolean check = checkSpon(post_id);
         if(!check){ //후원이 하나 이상 등록
-            if(hasReview(post_id)==1) { //리뷰를 가지고 있으면 글 상태 변경 불가
+            if(hasReview(post_id)) { //리뷰를 가지고 있으면 글 상태 변경 불가
                 throw new ApiException(ExceptionEnum.POST06);
             }
             return postRepository.changeState(post_id);
@@ -92,7 +95,7 @@ public class PostService {
     public void delete(Long post_id) throws IOException{
         Optional<Post> optionalPost=iPostRepository.findById(post_id);
         Post post=optionalPost.get();
-        if(post.getPost_state() == 1){
+        if(post.isPostState()){
             //후원 완료된 글은 삭제 불가
             throw new ApiException(ExceptionEnum.POST04);
         }
@@ -113,15 +116,15 @@ public class PostService {
         Post post = optionalPost.get();
         List<Spon> sponList = sponRepository.checkSpon(post_id);
 
-        if(post.getRemain_spon() != sponList.size()){ //남은 스폰 수와 등록된 수가 같지 않으면 후원이 하나라도 등록된 것임.
+        if(post.getRemainSpon() != sponList.size()){ //남은 스폰 수와 등록된 수가 같지 않으면 후원이 하나라도 등록된 것임.
             check = false;
         }
         return check;
     }
 
-    public int hasReview(Long post_id){
+    public boolean hasReview(Long post_id){
         Optional<Post> optionalPost= iPostRepository.findById(post_id);
         Post post = optionalPost.get();
-        return post.getHas_review();
+        return post.isHasReview();
     }
 }

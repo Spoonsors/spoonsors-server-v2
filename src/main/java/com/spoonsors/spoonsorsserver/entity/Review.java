@@ -1,36 +1,33 @@
 package com.spoonsors.spoonsorsserver.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @ToString
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class Review {
+public class Review  extends BaseEntity {
     @Id
-    @Column(nullable = false)
-    private Long review_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "review_id", nullable = false)
+    private Long reviewId;
 
-    @JsonIgnore
-    @OneToOne
-    @MapsId
+    @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @Column(columnDefinition = "TEXT")
-    private String review_img;
+    @Column(name = "review_img", columnDefinition = "TEXT")
+    private String reviewImg;
 
-    @Column(length = 400)
-    private String review_txt;
+    @Column(name = "review_txt", length = 400)
+    private String reviewText;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-    private Date review_date;
+    @Column(name = "review_date", nullable = false)
+    private LocalDate reviewDate;
 }
