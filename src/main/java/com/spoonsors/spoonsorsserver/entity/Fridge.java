@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.util.Date;
 @Builder
 @Getter
 @Setter
-public class Fridge {
+public class Fridge extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     @Column(name = "fridge_id", nullable = false)

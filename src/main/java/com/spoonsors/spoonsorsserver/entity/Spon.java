@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Spon {
+public class Spon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
     @Column(name = "spon_id", nullable = false)

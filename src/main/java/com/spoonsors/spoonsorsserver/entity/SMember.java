@@ -1,6 +1,7 @@
 package com.spoonsors.spoonsorsserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,7 @@ import java.util.List;
                 )
         }
 )
-public class SMember extends BaseTime {
+public class SMember extends BaseEntity {
     @Id
     @Column(length = 100, nullable = false)
     private String sMemberId;

@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +23,7 @@ import java.util.List;
                 )
         }
 )
-public class BMember extends BaseTime{
+public class BMember  extends BaseEntity {
     @Id
     @Column(name="b_member_id", length = 100, nullable = false)
     private String bMemberId;
