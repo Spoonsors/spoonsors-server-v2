@@ -36,12 +36,13 @@ public class SponService {
             Optional<Post> optionalPost = iPostRepository.findById(postId);
             Post post = optionalPost.get();
 
-            Spon spon = new Spon();
-            spon.setSponDate(null);
-            spon.setSponed(false);
-            spon.setIngredients(ingredient);
-            spon.setPost(post);
-            spon.setSMember(null);
+            Spon spon = Spon.builder()
+                    .sponDate(null)
+                    .isSponed(false)
+                    .ingredients(ingredient)
+                    .post(post)
+                    .sMember(null)
+                    .build();
 
             iSponRepository.save(spon);
         }
@@ -105,7 +106,7 @@ public class SponService {
             sponItem.setIngredients_name(s.getIngredients().getIngredientsName());
             sponItem.setProduct_name(s.getIngredients().getProductName());
             sponItem.setPost_id(s.getPost().getPostId());
-            sponItem.setWriter_nickname(s.getPost().getWriter().getBMemberNickname());
+            sponItem.setWriter_nickname(s.getPost().getWriter().getMemberNickname());
             sponItem.setPrice(s.getIngredients().getPrice());
 
             sponDtos.add(sponItem);

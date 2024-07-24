@@ -59,26 +59,26 @@ public class BMemberService {
         BMember member = ibMemberRepository.save(requestDto.toEntity());
         member.encodePassword(passwordEncoder);
 
-        return member.getBMemberId();
+        return member.getMemberId();
     }
 
 
     public LoginDto login(Map<String, String> members) {
         BMember bMember = ibMemberRepository.findById(members.get("id"))
-                .filter(it -> encoder.matches(members.get("pwd"), it.getBMemberPw()))   // 암호화된 비밀번호와 비교하도록 수정
+                .filter(it -> encoder.matches(members.get("pwd"), it.getMemberPw()))   // 암호화된 비밀번호와 비교하도록 수정
                 .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05)); //아이디와 비밀번호 불일치
 
         List<String> roles = new ArrayList<>();
         roles.add(bMember.getRole().name());
 
         LoginDto loginDto = new LoginDto();
-        loginDto.setMember_id(bMember.getBMemberId());
-        loginDto.setMember_name(bMember.getBMemberName());
-        loginDto.setMember_nickname(bMember.getBMemberNickname());
+        loginDto.setMember_id(bMember.getMemberId());
+        loginDto.setMember_name(bMember.getMemberName());
+        loginDto.setMember_nickname(bMember.getMemberNickname());
         loginDto.setMember_address(bMember.getBMemberAddress());
-        loginDto.setMember_phoneNumber(bMember.getBMemberPhoneNumber());
+        loginDto.setMember_phoneNumber(bMember.getMemberPhoneNumber());
         loginDto.setMember_profilePath((bMember.getProfilePath()));
-        loginDto.setToken(jwtTokenProvider.createToken(bMember.getBMemberId(), roles));
+        loginDto.setToken(jwtTokenProvider.createToken(bMember.getMemberId(), roles));
         return loginDto;
     }
 

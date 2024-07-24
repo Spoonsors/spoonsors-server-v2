@@ -2,18 +2,18 @@ package com.spoonsors.spoonsorsserver.entity;
 
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @ToString
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @Entity
 public class Post extends BaseEntity {
 
@@ -51,6 +51,6 @@ public class Post extends BaseEntity {
     private String menuName;
 
     @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE})
-    private List<Spon> spons = new ArrayList<>();
+    private List<Spon> spons;
 
 }

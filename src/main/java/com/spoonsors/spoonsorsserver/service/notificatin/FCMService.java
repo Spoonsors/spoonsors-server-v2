@@ -39,7 +39,7 @@ public class FCMService {
 
         if(state.equals("매칭")){ //target token = 자립 준비 청년 토큰, targetId: 자립 준비 청년 아이디
             Optional<SMember> optionalSMember = isMemberRepository.findById(targetId);
-            String targetNickname = optionalSMember.get().getSMemberNickname();
+            String targetNickname = optionalSMember.get().getMemberNickname();
 
             Optional<Spon> optionalSpon = iSponRepository.findById(postOrSponId);
             Spon spon = optionalSpon.get();
@@ -54,7 +54,7 @@ public class FCMService {
             Post post = optionalSpon.get();
             postId=post.getPostId();
             title="리뷰 등록!";
-            body=post.getWriter().getBMemberNickname()+"님이 후원 감사 리뷰를 보냈어요. 지금 확인해 보세요!";
+            body=post.getWriter().getMemberNickname()+"님이 후원 감사 리뷰를 보냈어요. 지금 확인해 보세요!";
         }else{
             throw new ApiException(ExceptionEnum.PUSH01);
         }

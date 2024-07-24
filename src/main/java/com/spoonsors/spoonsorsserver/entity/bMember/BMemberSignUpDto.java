@@ -5,17 +5,17 @@ import com.spoonsors.spoonsorsserver.entity.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-
 
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class BMemberSignUpDto {
 
     @NotBlank(message = "아이디를 입력해주세요")
@@ -48,19 +48,17 @@ public class BMemberSignUpDto {
 
     private String profilePath;
 
-
-    @Builder
-    public BMember toEntity(){
+    public BMember toEntity() {
         return BMember.builder()
-                .bMemberId(id)
-                .bMemberPw(pwd)
-                .bMemberName(name)
+                .memberId(id)
+                .memberPw(pwd)
+                .memberName(name)
                 .bMemberBirth(birth)
-                .bMemberNickname(nickname)
-                .bMemberPhoneNumber(phoneNumber)
+                .memberNickname(nickname)
+                .memberPhoneNumber(phoneNumber)
                 .bMemberAddress(address)
                 .bMemberCertificate(certificate)
-                .role(Role.ROLE_USER)
+                .role(Role.ROLE_BMEMBER)
                 .token(token)
                 .profilePath(profilePath)
                 .isVerified(false)

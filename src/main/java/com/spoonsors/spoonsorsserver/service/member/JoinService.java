@@ -221,17 +221,17 @@ public class JoinService {
     public String verifyFindId(String name, String phoneNum)  {
         {
             if (bMemberRepository.findId(name, phoneNum).isPresent()) {
-                return bMemberRepository.findId(name, phoneNum).get().getBMemberId();
+                return bMemberRepository.findId(name, phoneNum).get().getMemberId();
             }else
-                return sMemberRepository.findId(name, phoneNum).get().getSMemberId();
+                return sMemberRepository.findId(name, phoneNum).get().getMemberId();
             }
         }
     public String matchId(String id) {
         if (ibMemberRepository.findById(id).isPresent()) {
-            return ibMemberRepository.findById(id).get().getBMemberId();
+            return ibMemberRepository.findById(id).get().getMemberId();
         }
         if (isMemberRepository.findById(id).isPresent()) {
-            return isMemberRepository.findById(id).get().getSMemberId();
+            return isMemberRepository.findById(id).get().getMemberId();
         }
         //등록된 아이디 없음
         throw new ApiException(ExceptionEnum.LOGIN03);

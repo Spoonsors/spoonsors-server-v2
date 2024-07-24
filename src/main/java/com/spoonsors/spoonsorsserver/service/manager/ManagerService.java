@@ -83,10 +83,10 @@ public class ManagerService {
         List<CertificateDto> certificateDtos = new ArrayList<>();
         for(BMember b : bMember){
             CertificateDto certificateDto = new CertificateDto();
-            certificateDto.setBMember_id(b.getBMemberId());
-            certificateDto.setBMember_name(b.getBMemberName());
+            certificateDto.setBMember_id(b.getMemberId());
+            certificateDto.setBMember_name(b.getMemberName());
             certificateDto.setBMember_birth(b.getBMemberBirth().toString());
-            certificateDto.setBMember_phoneNumber(b.getBMemberPhoneNumber());
+            certificateDto.setBMember_phoneNumber(b.getMemberPhoneNumber());
             certificateDto.setBMember_address(b.getBMemberAddress());
             certificateDto.setBMember_certificate(b.getBMemberCertificate());
             certificateDto.set_verified(b.isVerified());

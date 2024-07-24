@@ -3,14 +3,13 @@ package com.spoonsors.spoonsorsserver.entity;
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 
 @ToString
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @Entity
 public class MealPlanner extends BaseEntity {
     @Id

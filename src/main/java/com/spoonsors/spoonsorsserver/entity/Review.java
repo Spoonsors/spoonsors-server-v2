@@ -3,15 +3,14 @@ package com.spoonsors.spoonsorsserver.entity;
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @ToString
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 @Entity
 public class Review  extends BaseEntity {
     @Id

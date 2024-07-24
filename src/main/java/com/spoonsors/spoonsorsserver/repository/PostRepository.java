@@ -46,7 +46,7 @@ public class PostRepository {
 
     public void delete(Long postId){
         Post post = em.find(Post.class, postId);
-        canPost(post.getWriter().getBMemberId());
+        canPost(post.getWriter().getMemberId());
         em.remove(findById(postId));
     }
 

@@ -1,19 +1,16 @@
 package com.spoonsors.spoonsorsserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
-@ToString
-@Setter
+
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Setter
+@SuperBuilder
 @Entity
 @Table(
         name="smember",
@@ -24,39 +21,13 @@ import java.util.List;
                 )
         }
 )
-public class SMember extends BaseEntity {
-    @Id
-    @Column(length = 100, nullable = false)
-    private String sMemberId;
+public class SMember extends Member {
 
-    @Column(name = "sMember_pw", nullable = false, length = 100)
-    private String sMemberPw;
-
-    @Column(name = "sMember_nickname", nullable = false, length = 100, unique = true)
-    private String sMemberNickname;
-
-    @Column(name = "sMember_name", nullable = false, length = 100)
-    private String sMemberName;
-
-    @Column(name = "sMember_phoneNumber", nullable = false, length = 100)
-    private String sMemberPhoneNumber;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", columnDefinition = "ENUM('ROLE_SMEMBER', 'ROLE_BMEMBER','ROLE_ADMIN') DEFAULT 'ROLE_SMEMBER'")
+    private Role role;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sMember")
-    private List<Spon> spons = new ArrayList<>();
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", columnDefinition = "ENUM('ROLE_USER', 'ROLE_ADMIN') DEFAULT 'ROLE_USER'")
-    private Role role;
-
-    @Column(name = "token", length = 255)
-    private String token;
-
-
-    @Column(name = "profile_path", nullable = false, length = 255)
-    private String profilePath;
-
-    public void encodePassword(PasswordEncoder passwordEncoder){
-        this.sMemberPw = passwordEncoder.encode(sMemberPw);
-    }
+    private final List<Spon> spons;
 }

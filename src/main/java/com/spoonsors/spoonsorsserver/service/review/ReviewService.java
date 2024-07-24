@@ -44,7 +44,7 @@ public class ReviewService {
         addRreview.setReviewImg(img);
 
         postRepository.changeReviewState(postId);
-        postRepository.canPost(post.getWriter().getBMemberId());
+        postRepository.canPost(post.getWriter().getMemberId());
         return addRreview;
 
     }
@@ -86,7 +86,7 @@ public class ReviewService {
                     getReviewDto.setReview_img(review.getReviewImg());
                     getReviewDto.setReview_txt(review.getReviewText());
                     getReviewDto.setWrite_date(review.getReviewDate());
-                    getReviewDto.setWriter_nickname(post.getWriter().getBMemberNickname());
+                    getReviewDto.setWriter_nickname(post.getWriter().getMemberNickname());
                     set.add(getReviewDto);
                     idSet.add(postId);
                 }

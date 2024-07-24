@@ -2,16 +2,16 @@ package com.spoonsors.spoonsorsserver.entity;
 
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
 
 @Table(name="fridge")
 @Entity
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 public class Fridge extends BaseEntity {
