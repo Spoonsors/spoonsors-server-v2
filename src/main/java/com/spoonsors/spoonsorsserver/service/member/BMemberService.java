@@ -59,26 +59,26 @@ public class BMemberService {
         BMember member = ibMemberRepository.save(requestDto.toEntity());
         member.encodePassword(passwordEncoder);
 
-        return member.getBMember_id();
+        return member.getBMemberId();
     }
 
 
     public LoginDto login(Map<String, String> members) {
         BMember bMember = ibMemberRepository.findById(members.get("id"))
-                .filter(it -> encoder.matches(members.get("pwd"), it.getBMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
+                .filter(it -> encoder.matches(members.get("pwd"), it.getBMemberPw()))   // 암호화된 비밀번호와 비교하도록 수정
                 .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05)); //아이디와 비밀번호 불일치
 
         List<String> roles = new ArrayList<>();
         roles.add(bMember.getRole().name());
 
         LoginDto loginDto = new LoginDto();
-        loginDto.setMember_id(bMember.getBMember_id());
-        loginDto.setMember_name(bMember.getBMember_name());
-        loginDto.setMember_nickname(bMember.getBMember_nickname());
-        loginDto.setMember_address(bMember.getBMember_address());
-        loginDto.setMember_phoneNumber(bMember.getBMember_phoneNumber());
-        loginDto.setMember_profilePath((bMember.getProfile_path()));
-        loginDto.setToken(jwtTokenProvider.createToken(bMember.getBMember_id(), roles));
+        loginDto.setMember_id(bMember.getBMemberId());
+        loginDto.setMember_name(bMember.getBMemberName());
+        loginDto.setMember_nickname(bMember.getBMemberNickname());
+        loginDto.setMember_address(bMember.getBMemberAddress());
+        loginDto.setMember_phoneNumber(bMember.getBMemberPhoneNumber());
+        loginDto.setMember_profilePath((bMember.getProfilePath()));
+        loginDto.setToken(jwtTokenProvider.createToken(bMember.getBMemberId(), roles));
         return loginDto;
     }
 
@@ -86,8 +86,8 @@ public class BMemberService {
         bMemberRepository.putToken(token);
     }
 
-    public int canPost(String bMemberId){
+    public boolean canPost(String bMemberId){
         Optional<BMember> optionalBMember = ibMemberRepository.findById(bMemberId);
-        return optionalBMember.get().getCan_post();
+        return optionalBMember.get().isCanPost();
     }
 }

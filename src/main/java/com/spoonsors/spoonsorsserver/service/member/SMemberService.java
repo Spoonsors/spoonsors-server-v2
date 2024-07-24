@@ -57,13 +57,13 @@ public class SMemberService {
         member.encodePassword(passwordEncoder);
 
         //member.addUserAuthority();
-        return member.getSMember_id();
+        return member.getSMemberId();
     }
 
     public LoginDto login(Map<String, String> members) {
 
         SMember sMember = isMemberRepository.findById(members.get("id"))
-                .filter(it -> encoder.matches(members.get("pwd"), it.getSMember_pwd()))   // 암호화된 비밀번호와 비교하도록 수정
+                .filter(it -> encoder.matches(members.get("pwd"), it.getSMemberPw()))   // 암호화된 비밀번호와 비교하도록 수정
                 .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05)); //아이디와 비밀번호 불일치
 
 
@@ -71,12 +71,12 @@ public class SMemberService {
         roles.add(sMember.getRole().name());
 
         LoginDto loginDto = new LoginDto();
-        loginDto.setMember_id(sMember.getSMember_id());
-        loginDto.setMember_name(sMember.getSMember_name());
-        loginDto.setMember_nickname(sMember.getSMember_nickname());
-        loginDto.setMember_phoneNumber(sMember.getSMember_phoneNumber());
-        loginDto.setMember_profilePath((sMember.getProfile_path()));
-        loginDto.setToken(jwtTokenProvider.createToken(sMember.getSMember_id(), roles));
+        loginDto.setMember_id(sMember.getSMemberId());
+        loginDto.setMember_name(sMember.getSMemberName());
+        loginDto.setMember_nickname(sMember.getSMemberNickname());
+        loginDto.setMember_phoneNumber(sMember.getSMemberPhoneNumber());
+        loginDto.setMember_profilePath((sMember.getProfilePath()));
+        loginDto.setToken(jwtTokenProvider.createToken(sMember.getSMemberId(), roles));
         return loginDto;
     }
 

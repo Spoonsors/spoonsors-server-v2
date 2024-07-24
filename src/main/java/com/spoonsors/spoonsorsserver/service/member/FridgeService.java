@@ -3,13 +3,14 @@ package com.spoonsors.spoonsorsserver.service.member;
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Fridge;
 import com.spoonsors.spoonsorsserver.entity.bMember.FridgeDto;
-import com.spoonsors.spoonsorsserver.repository.*;
-import com.spoonsors.spoonsorsserver.service.ImageUtils;
+import com.spoonsors.spoonsorsserver.repository.FridgeRepository;
+import com.spoonsors.spoonsorsserver.repository.IFridgeRepository;
+import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class FridgeService {
         addFridgeItem.setBMember(bMember);
 
 
-            addFridgeItem.setFridge_item_img(img);
+            addFridgeItem.setFridgeItemImg(img);
         return addFridgeItem;
     }
 

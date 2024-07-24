@@ -40,14 +40,14 @@ public class SMemberSignUpDto {
     @Builder
     public SMember toEntity(){
         return SMember.builder()
-                .sMember_id(id)
-                .sMember_pwd(pwd)
-                .sMember_name(name)
-                .sMember_nickname(nickname)
-                .sMember_phoneNumber(phoneNumber)
-                .role(Role.SMEMBER)
+                .sMemberId(id)
+                .sMemberPw(pwd)
+                .sMemberName(name)
+                .sMemberNickname(nickname)
+                .sMemberPhoneNumber(phoneNumber)
+                .role(Role.ROLE_USER)
                 .token(token)
-                .profile_path(profilePath)
+                .profilePath(profilePath)
                 .build();
     }
 }

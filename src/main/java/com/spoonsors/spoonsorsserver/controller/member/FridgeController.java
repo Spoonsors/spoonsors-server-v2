@@ -8,10 +8,7 @@ import com.spoonsors.spoonsorsserver.service.Image.S3Uploader;
 import com.spoonsors.spoonsorsserver.service.member.FridgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.expression.spel.support.ReflectivePropertyAccessor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +35,7 @@ public class FridgeController {
             }else{
                 Optional<Ingredients> optionalIngredients= iIngredientsRepository.findByIngredientsName(fridgeDto.getName());
                 if(optionalIngredients.isPresent()){
-                    url = optionalIngredients.get().getIngredients_image();
+                    url = optionalIngredients.get().getIngredientsImage();
                 }
             }
             addedItem = fridgeService.addFridgeItem(bMemberId, fridgeDto, url);

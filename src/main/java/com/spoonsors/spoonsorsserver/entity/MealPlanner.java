@@ -13,29 +13,36 @@ import lombok.*;
 @Entity
 public class MealPlanner {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
-    private Long mealPlanner_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "mealPlanner_id", nullable = false)//MySQL의 AUTO_INCREMENT를 사용
+    private Long mealPlannerId;
 
-    @Column( nullable = false)
-    private String menu_name1;
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String menu_img1;
+    @Column(name = "menu_name1", nullable = false, length = 255)
+    private String menuName1;
 
-    private String menu_name2;
-    @Column(columnDefinition = "TEXT")
-    private String menu_img2;
+    @Column(name = "menu_img1", nullable = false, columnDefinition = "TEXT")
+    private String menuImg1;
 
-    private String menu_name3;
-    @Column(columnDefinition = "TEXT")
-    private String menu_img3;
+    @Column(name = "menu_name2", length = 255)
+    private String menuName2;
 
+    @Column(name = "menu_img2", columnDefinition = "TEXT")
+    private String menuImg2;
 
-    private String menu_name4;
-    @Column(columnDefinition = "TEXT")
-    private String menu_img4;
+    @Column(name = "menu_name3", length = 255)
+    private String menuName3;
 
-    @Column(length = 100, nullable = false)
-    private String mealPlanner_name;
+    @Column(name = "menu_img3", columnDefinition = "TEXT")
+    private String menuImg3;
+
+    @Column(name = "menu_name4", length = 255)
+    private String menuName4;
+
+    @Column(name = "menu_img4", columnDefinition = "TEXT")
+    private String menuImg4;
+
+    @Column(name = "mealPlanner_name", nullable = false, length = 100)
+    private String mealPlannerName;
 
     private Float kcal;
 

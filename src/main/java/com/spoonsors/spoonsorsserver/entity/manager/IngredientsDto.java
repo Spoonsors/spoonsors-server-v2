@@ -19,9 +19,9 @@ public class IngredientsDto {
 
     public Ingredients toEntity() {
         return Ingredients.builder()
-                .ingredients_id(null)
-                .ingredients_name(ingredientsName)
-                .product_name(productName)
+                .ingredientsId(null)
+                .ingredientsName(ingredientsName)
+                .productName(productName)
                 .price(price)
                 .build();
     }

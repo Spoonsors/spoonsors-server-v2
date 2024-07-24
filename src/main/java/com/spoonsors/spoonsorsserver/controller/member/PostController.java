@@ -23,8 +23,8 @@ public class PostController {
     @PostMapping("/bMember/post/{bMemberId}")
     public String writePost(@PathVariable String bMemberId, @RequestBody WritePostDto writePostDto) throws IOException {
         Post post=postService.writePost(bMemberId, writePostDto);
-        sponService.addSpon(writePostDto.getItem_list(), post.getPost_id());
-        return "["+post.getPost_id()+"]"+ "\""+post.getPost_title()+"\""+ " 작성 완료";
+        sponService.addSpon(writePostDto.getItem_list(), post.getPostId());
+        return "["+post.getPostId()+"]"+ "\""+post.getPostTitle()+"\""+ " 작성 완료";
     }
 
     //후원 글 삭제

@@ -40,7 +40,7 @@ public class KakaoPayService {
             Optional<Spon> optionalSpon= iSponRepository.findById(spon_id);
             Spon spon = optionalSpon.get();
             Ingredients ingredients = spon.getIngredients();
-            item_name=ingredients.getIngredients_name();
+            item_name=ingredients.getIngredientsName();
             total_price += ingredients.getPrice();
         }
         int quantity=sponList.size()-1;

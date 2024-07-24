@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.swing.text.html.parser.Entity;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,15 +16,15 @@ public class ReviewDto {
 
     private String review_txt;
 
-    private Date review_date;
+    private LocalDate review_date;
 
     private Post post;
 
     public Review toEntity(){
         return Review.builder()
-                .review_id(null)
-                .review_txt(review_txt)
-                .review_date(review_date)
+                .reviewId(null)
+                .reviewText(review_txt)
+                .reviewDate(review_date)
                 .post(post)
                 .build();
     }

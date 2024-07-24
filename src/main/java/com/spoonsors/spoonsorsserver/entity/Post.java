@@ -2,10 +2,9 @@ package com.spoonsors.spoonsorsserver.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @ToString
@@ -19,39 +18,38 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
-    @Column(nullable = false)
-    private Long post_id;
+    @Column(name="post_id", nullable = false)
+    private Long postId;
 
-    //@JsonIgnore
     @ManyToOne
     @JoinColumn(name = "writer_id", nullable = false)
-    private BMember bMember;
+    private BMember writer;
 
-    @Column( length = 100)
-    private String post_title;
+    @Column( name="post_title", length = 100)
+    private String postTitle;
 
-    @Column(length = 400)
-    private String post_txt;
+    @Column(name="post_txt", length = 400)
+    private String postTxt;
 
-    @ColumnDefault("0")
-    private Integer post_state;
+    @Column(name = "post_state", columnDefinition = "TINYINT DEFAULT 0")
+    private boolean postState;
 
-    @ColumnDefault("0") //리뷰 없으면 0, 있으면 1
-    private Integer has_review;
+    @Column(name = "has_review", nullable = false, columnDefinition = "TINYINT DEFAULT 0")
+    private boolean hasReview;
 
-    @Temporal(value = TemporalType.TIMESTAMP)
-    @Column( nullable = false) //datetime
-    private Date post_date;
+    @Column(name = "post_date", nullable = false)
+    private LocalDate postDate;
+
+    @Column(name = "remain_spon", nullable = false, columnDefinition = "INT DEFAULT 0")
+    private int remainSpon;
+
+    @Column(name = "menu_img", columnDefinition = "TEXT")
+    private String menuImg;
+
+    @Column(name = "menu_name", length = 255)
+    private String menuName;
 
     @OneToMany(mappedBy = "post", cascade = {CascadeType.REMOVE})
-    private List<Spon> spon = new ArrayList<>();
-
-    @ColumnDefault("0")
-    private Integer remain_spon;
-
-    @Column(columnDefinition = "TEXT")
-    private String menu_img;
-
-    private String menu_name;
+    private List<Spon> spons = new ArrayList<>();
 
 }

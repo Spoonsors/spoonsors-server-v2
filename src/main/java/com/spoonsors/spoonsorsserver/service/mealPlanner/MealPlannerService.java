@@ -23,20 +23,20 @@ public class MealPlannerService {
     // 식단 등록
     public Long regist(MealPlanner mealPlanner){
         mealPlannerRepository.regist(mealPlanner);
-        return mealPlanner.getMealPlanner_id();
+        return mealPlanner.getMealPlannerId();
     }
     // 식단 수정
     public Long update(MealPlanner mealPlanner){
-        MealPlanner updateMealPlanner = mealPlannerRepository.findById(mealPlanner.getMealPlanner_id());
-        updateMealPlanner.setMenu_name1(mealPlanner.getMenu_name1());
-        updateMealPlanner.setMenu_img1(mealPlanner.getMenu_img1());
-        updateMealPlanner.setMenu_name2(mealPlanner.getMenu_name2());
-        updateMealPlanner.setMenu_img2(mealPlanner.getMenu_img2());
-        updateMealPlanner.setMenu_name3(mealPlanner.getMenu_name3());
-        updateMealPlanner.setMenu_img3(mealPlanner.getMenu_img3());
-        updateMealPlanner.setMenu_name4(mealPlanner.getMenu_name4());
-        updateMealPlanner.setMenu_img4(mealPlanner.getMenu_img4());
-        updateMealPlanner.setMealPlanner_name(mealPlanner.getMealPlanner_name());
+        MealPlanner updateMealPlanner = mealPlannerRepository.findById(mealPlanner.getMealPlannerId());
+        updateMealPlanner.setMenuName1(mealPlanner.getMenuName1());
+        updateMealPlanner.setMenuImg1(mealPlanner.getMenuImg1());
+        updateMealPlanner.setMenuName2(mealPlanner.getMenuName2());
+        updateMealPlanner.setMenuImg2(mealPlanner.getMenuImg2());
+        updateMealPlanner.setMenuName3(mealPlanner.getMenuName3());
+        updateMealPlanner.setMenuImg3(mealPlanner.getMenuImg3());
+        updateMealPlanner.setMenuName4(mealPlanner.getMenuName4());
+        updateMealPlanner.setMenuImg4(mealPlanner.getMenuImg4());
+        updateMealPlanner.setMealPlannerName(mealPlanner.getMealPlannerName());
         updateMealPlanner.setKcal(mealPlanner.getKcal());
         updateMealPlanner.setCarbohydrate(mealPlanner.getCarbohydrate());
         updateMealPlanner.setProtein(mealPlanner.getProtein());
@@ -44,7 +44,7 @@ public class MealPlannerService {
         updateMealPlanner.setNa(mealPlanner.getNa());
         updateMealPlanner.setLevel(mealPlanner.getLevel());
 
-        return updateMealPlanner.getMealPlanner_id();
+        return updateMealPlanner.getMealPlannerId();
     }
 
     // 식단 삭제

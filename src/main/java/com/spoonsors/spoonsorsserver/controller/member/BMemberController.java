@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
@@ -42,7 +41,7 @@ public class BMemberController {
     }
 
     @GetMapping("/bMember/canPost/{bMemberId}")
-    public int canPost(@PathVariable String bMemberId){
+    public boolean canPost(@PathVariable String bMemberId){
         return bMemberService.canPost(bMemberId);
     }
 }

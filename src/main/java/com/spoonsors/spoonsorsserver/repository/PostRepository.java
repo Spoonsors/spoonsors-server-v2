@@ -16,37 +16,37 @@ public class PostRepository {
 
     public void changeRemain(Long post_id){
         Post post = em.find(Post.class, post_id);
-        post.setRemain_spon(post.getRemain_spon()-1);
+        post.setRemainSpon(post.getRemainSpon()-1);
     }
 
     public String changeState(Long post_id){
         Post post = em.find(Post.class, post_id);
-        if(post.getPost_state()==1 && post.getHas_review()==0){
-            post.setPost_state(0);
+        if(post.isPostState() && !post.isHasReview()){
+            post.setPostState(false);
             return "글 마감 취소 완료";
         }else{
-            post.setPost_state(1);
+            post.setPostState(true);
             return "글 마감 완료";
         }
     }
 
     public void canPost(String bMemberId){
         BMember bMember = em.find(BMember.class, bMemberId);
-        if(bMember.getCan_post()==0){
-            bMember.setCan_post(1);
+        if(bMember.isCanPost()){
+            bMember.setCanPost(false);
         }else{
-            bMember.setCan_post(0);
+            bMember.setCanPost(true);
         }
     }
 
     public void changeReviewState(Long post_id){
         Post post = em.find(Post.class, post_id);
-        post.setHas_review(1);
+        post.setHasReview(true);
     }
 
     public void delete(Long postId){
         Post post = em.find(Post.class, postId);
-        canPost(post.getBMember().getBMember_id());
+        canPost(post.getWriter().getBMemberId());
         em.remove(findById(postId));
     }
 

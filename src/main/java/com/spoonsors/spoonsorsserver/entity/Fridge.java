@@ -1,38 +1,41 @@
 package com.spoonsors.spoonsorsserver.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
-@ToString
+
+@Table(name="fridge")
+@Entity
+@Builder
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
 public class Fridge {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
-    @Column(nullable = false)
-    private Long fridge_id;
+    @Column(name = "fridge_id", nullable = false)
+    private Long fridgeId;
 
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member_id")
+    @ManyToOne
+    @JoinColumn(name = "bMember_id", nullable = false)
     private BMember bMember;
 
-    @Column( length = 100, nullable = false)
-    private String fridge_item_name;
+    @Column(name = "fridge_item_name", nullable = false, length = 100)
+    private String fridgeItemName;
 
-    @Column(columnDefinition = "TEXT")
-    private String fridge_item_img;
+    @Column(name = "fridge_item_img", columnDefinition = "TEXT")
+    private String fridgeItemImg;
 
-    @Column(nullable = false)
-    private Integer is_frized;
+    @Column(name = "is_frized", nullable = false, columnDefinition = "TINYINT DEFAULT 0")
+    private boolean fridgeIsFrized;
 
-    @Temporal(value = TemporalType.DATE)
-    private Date expiration_date;
+    @Column(name = "expiration_date")
+    private Date expirationDate;
+
+    @ManyToOne
+    @JoinColumn(name="ingredientsId")
+    private Ingredients ingredientsId;
 }

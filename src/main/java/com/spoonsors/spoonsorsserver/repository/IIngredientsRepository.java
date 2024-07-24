@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface IIngredientsRepository extends JpaRepository<Ingredients, Long> {
-    @Query("SELECT i FROM Ingredients i WHERE i.ingredients_name =:name")
+    @Query("SELECT i FROM Ingredients i WHERE i.ingredientsName =:name")
     Optional<Ingredients> findByIngredientsName(String name);
 }

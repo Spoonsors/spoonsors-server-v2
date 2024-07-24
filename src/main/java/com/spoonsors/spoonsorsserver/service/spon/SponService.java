@@ -12,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,8 +37,8 @@ public class SponService {
             Post post = optionalPost.get();
 
             Spon spon = new Spon();
-            spon.setSpon_date(null);
-            spon.setSpon_state(0);
+            spon.setSponDate(null);
+            spon.setSponed(false);
             spon.setIngredients(ingredient);
             spon.setPost(post);
             spon.setSMember(null);
@@ -56,25 +55,24 @@ public class SponService {
         Optional<SMember> optionalSMember = iSMemberRepository.findById(sMemberId);
         SMember sMember = optionalSMember.get();
 
-       Date date = new Date();
         for(int i=0;i<sponList.size();i++){
             Post post = sponList.get(i).getPost();
             Spon spon2=Spon.builder()
-                    .spon_id(sponList.get(i).getSpon_id())
-                    .spon_date(date)
+                    .sponId(sponList.get(i).getSponId())
+                    .sponDate(LocalDate.now())
                     .ingredients(sponList.get(i).getIngredients())
                     .sMember(sMember)
                     .post(post)
-                    .spon_state(1)
+                    .isSponed(true)
                     .tid(tid)
                     .build();
 
             iSponRepository.save(spon2);
 
-            postRepository.changeRemain(post.getPost_id());
+            postRepository.changeRemain(post.getPostId());
             //자동으로 post상태 바꿔주는 코드
-            if(post.getRemain_spon()==0){ //더이상 남은 후원이 없으면 글 완료 처리
-                postRepository.changeState(post.getPost_id());
+            if(post.getRemainSpon()==0){ //더이상 남은 후원이 없으면 글 완료 처리
+                postRepository.changeState(post.getPostId());
             }
         }
 
@@ -87,7 +85,7 @@ public class SponService {
         Spon spon = optionalSpon.get();
 
         //후원이 완료된 물품일 경우 오류
-        if(spon.getSpon_state()!=0){
+        if(spon.isSponed()){
             throw new ApiException(ExceptionEnum.SPON01);
         }
 
@@ -102,12 +100,12 @@ public class SponService {
         for (Spon s : spon) {
 
             SponDto sponItem = new SponDto();
-            sponItem.setSpon_date(s.getSpon_date());
-            sponItem.setIngredients_image(s.getIngredients().getIngredients_image());
-            sponItem.setIngredients_name(s.getIngredients().getIngredients_name());
-            sponItem.setProduct_name(s.getIngredients().getProduct_name());
-            sponItem.setPost_id(s.getPost().getPost_id());
-            sponItem.setWriter_nickname(s.getPost().getBMember().getBMember_nickname());
+            sponItem.setSpon_date(s.getSponDate());
+            sponItem.setIngredients_image(s.getIngredients().getIngredientsImage());
+            sponItem.setIngredients_name(s.getIngredients().getIngredientsName());
+            sponItem.setProduct_name(s.getIngredients().getProductName());
+            sponItem.setPost_id(s.getPost().getPostId());
+            sponItem.setWriter_nickname(s.getPost().getWriter().getBMemberNickname());
             sponItem.setPrice(s.getIngredients().getPrice());
 
             sponDtos.add(sponItem);

@@ -1,23 +1,20 @@
 package com.spoonsors.spoonsorsserver.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
-@ToString
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(
-        name="bmember",
+        name="bMember",
         uniqueConstraints={
                 @UniqueConstraint(
                         name="phoneAndName",
@@ -27,55 +24,51 @@ import java.util.List;
 )
 public class BMember extends BaseTime{
     @Id
-    @Column(length = 100, nullable = false)
-    private String bMember_id;
+    @Column(name="b_member_id", length = 100, nullable = false)
+    private String bMemberId;
 
-    @JsonIgnore
-    @Column( length = 100, nullable = false)
-    private String bMember_pwd;
+    @Column(name="b_member_pw", length = 100, nullable = false)
+    private String bMemberPw;
 
-    @Column( length = 100, nullable = false,unique=true)
-    private String bMember_nickname;
+    @Column(name="b_member_nickname", length = 100, nullable = false,unique=true)
+    private String bMemberNickname;
 
-    @Column( length = 100, nullable = false)
-    private String bMember_name;
+    @Column(name="b_member_name", length = 100, nullable = false)
+    private String bMemberName;
 
-    @Column( length = 100, nullable = false)
-    private String bMember_birth;
+    @Column( name="b_member_birth",nullable = false)
+    private LocalDate bMemberBirth;
 
-    @JsonIgnore
-    @Column( length = 100, nullable = false)
-    private String bMember_phoneNumber;
+    @Column( name="b_member_phone_number",length = 100, nullable = false)
+    private String bMemberPhoneNumber;
 
-    @ColumnDefault("0")// 후원글 작성 가능 1, 불가능 0 -> 증명서 인증되어야 작성가능
-    private Integer can_post;
+    @Column(name = "can_post", nullable = false, columnDefinition = "TINYINT DEFAULT 0")// 후원글 작성 가능 1, 불가능 0 -> 증명서 인증되어야 작성가능
+    private boolean canPost;
 
-    @JsonIgnore
-    @Column( length = 100, nullable = false)
-    private String bMember_address;
+    @Column(name="b_member_address", length = 100, nullable = false)
+    private String bMemberAddress;
 
-    @JsonIgnore
-    @Column(nullable = false) //증명서 이미지
-    private String bMember_certificate;
+    @Column(name="b_member_certificate",nullable = false) //증명서 이미지
+    private String bMemberCertificate;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "bMember")
-    private List<Post> posts = new ArrayList<>();
 
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, columnDefinition = "ENUM('ROLE_USER', 'ROLE_ADMIN') DEFAULT 'ROLE_USER'")
     private Role role;
 
     private String token;
 
-    @ColumnDefault("0")
-    private int is_verified; //초기 0, 증명 완료 1
+    @Column(name = "is_verified", nullable = false, columnDefinition = "TINYINT DEFAULT 0")
+    private boolean isVerified;//초기 0, 증명 완료 1
 
-    @Column(nullable = false)
-    private String profile_path;
+    @Column(name="profile_path", nullable = false)
+    private String profilePath;
+
+    @OneToMany(mappedBy = "writer", cascade = {CascadeType.REMOVE})
+    List<Post> posts;
 
     public void encodePassword(PasswordEncoder passwordEncoder){
-        this.bMember_pwd = passwordEncoder.encode(bMember_pwd);
+        this.bMemberPw = passwordEncoder.encode(bMemberPw);
     }
 
 }

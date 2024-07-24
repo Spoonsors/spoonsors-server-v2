@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 
 @Getter
 @Setter
@@ -29,7 +31,7 @@ public class BMemberSignUpDto {
     private String name;
 
     @NotBlank(message = "생년월일을 입력해주세요.(예:20010904)")
-    private String birth;
+    private LocalDate birth;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(min=2, message = "2글자 이상으로 입력해주세요.")
@@ -50,20 +52,19 @@ public class BMemberSignUpDto {
     @Builder
     public BMember toEntity(){
         return BMember.builder()
-                .bMember_id(id)
-                .bMember_pwd(pwd)
-                .bMember_name(name)
-                .bMember_birth(birth)
-                .bMember_nickname(nickname)
-                .bMember_phoneNumber(phoneNumber)
-                .bMember_address(address)
-                .bMember_certificate(certificate)
-                .role(Role.BMEMBER)
+                .bMemberId(id)
+                .bMemberPw(pwd)
+                .bMemberName(name)
+                .bMemberBirth(birth)
+                .bMemberNickname(nickname)
+                .bMemberPhoneNumber(phoneNumber)
+                .bMemberAddress(address)
+                .bMemberCertificate(certificate)
+                .role(Role.ROLE_USER)
                 .token(token)
-                .profile_path(profilePath)
-                .is_verified(0)
-                .can_post(0)
-                .profile_path(profilePath)
+                .profilePath(profilePath)
+                .isVerified(false)
+                .canPost(false)
                 .build();
     }
 }

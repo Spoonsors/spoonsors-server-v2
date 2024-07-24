@@ -1,6 +1,5 @@
 package com.spoonsors.spoonsorsserver.entity.bMember;
 
-import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Fridge;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,15 +12,15 @@ import java.util.Date;
 @NoArgsConstructor
 public class FridgeDto {
     private String name;
-    private Integer isFrized;
+    private Boolean isFrized;
     private Date expirationDate;
 
     public Fridge toEntity(){
         return Fridge.builder()
-                .fridge_id(null)
-                .fridge_item_name(name)
-                .expiration_date(expirationDate)
-                .is_frized(isFrized)
+                .fridgeId(null)
+                .fridgeItemName(name)
+                .expirationDate(expirationDate)
+                .fridgeIsFrized(isFrized)
                 .build();
     }
 }

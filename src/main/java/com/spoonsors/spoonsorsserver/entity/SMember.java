@@ -26,35 +26,36 @@ import java.util.List;
 public class SMember extends BaseTime {
     @Id
     @Column(length = 100, nullable = false)
-    private String sMember_id;
+    private String sMemberId;
 
-    @JsonIgnore
-    @Column(length = 100, nullable = false)
-    private String sMember_pwd;
+    @Column(name = "sMember_pw", nullable = false, length = 100)
+    private String sMemberPw;
 
-    @Column(length = 100, nullable = false, unique=true)
-    private String sMember_nickname;
+    @Column(name = "sMember_nickname", nullable = false, length = 100, unique = true)
+    private String sMemberNickname;
 
-    @Column(length = 100, nullable = false)
-    private String sMember_name;
+    @Column(name = "sMember_name", nullable = false, length = 100)
+    private String sMemberName;
 
-    @JsonIgnore
-    @Column(length = 100, nullable = false)
-    private String sMember_phoneNumber;
+    @Column(name = "sMember_phoneNumber", nullable = false, length = 100)
+    private String sMemberPhoneNumber;
 
     @JsonIgnore
     @OneToMany(mappedBy = "sMember")
     private List<Spon> spons = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", columnDefinition = "ENUM('ROLE_USER', 'ROLE_ADMIN') DEFAULT 'ROLE_USER'")
     private Role role;
 
+    @Column(name = "token", length = 255)
     private String token;
 
-    @Column(nullable = false)
-    private String profile_path;
+
+    @Column(name = "profile_path", nullable = false, length = 255)
+    private String profilePath;
 
     public void encodePassword(PasswordEncoder passwordEncoder){
-        this.sMember_pwd = passwordEncoder.encode(sMember_pwd);
+        this.sMemberPw = passwordEncoder.encode(sMemberPw);
     }
 }
