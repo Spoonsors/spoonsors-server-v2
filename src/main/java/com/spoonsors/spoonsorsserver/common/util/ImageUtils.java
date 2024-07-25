@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.service;
+package com.spoonsors.spoonsorsserver.common.util;
 
 import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;

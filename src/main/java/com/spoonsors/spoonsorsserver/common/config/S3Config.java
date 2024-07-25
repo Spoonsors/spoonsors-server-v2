@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.ImageInfra;
+package com.spoonsors.spoonsorsserver.common.config;
 
 
 import com.amazonaws.auth.AWSCredentials;

@@ -5,7 +5,7 @@ import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
 import com.spoonsors.spoonsorsserver.entity.sMember.SMemberSignUpDto;
-import com.spoonsors.spoonsorsserver.loginInfra.JwtTokenProvider;
+import com.spoonsors.spoonsorsserver.security.jwt.JwtTokenProvider;
 import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;

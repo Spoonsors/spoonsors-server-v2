@@ -7,7 +7,7 @@ import com.spoonsors.spoonsorsserver.controller.authorize.SmsController;
 import com.spoonsors.spoonsorsserver.customException.ApiException;
 import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.authorize.MessageDto;
-import com.spoonsors.spoonsorsserver.loginInfra.JwtTokenProvider;
+import com.spoonsors.spoonsorsserver.security.jwt.JwtTokenProvider;
 import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;

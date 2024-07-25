@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.loginInfra;
+package com.spoonsors.spoonsorsserver.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

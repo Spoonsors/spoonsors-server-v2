@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.loginInfra;
+package com.spoonsors.spoonsorsserver.security.util;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
