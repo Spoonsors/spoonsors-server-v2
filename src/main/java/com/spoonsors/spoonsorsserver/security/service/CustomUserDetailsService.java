@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.loginInfra;
+package com.spoonsors.spoonsorsserver.security.service;
 
 import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;

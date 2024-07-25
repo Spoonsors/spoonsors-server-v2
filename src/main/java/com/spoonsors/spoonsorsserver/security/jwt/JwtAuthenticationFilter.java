@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.loginInfra;
+package com.spoonsors.spoonsorsserver.security.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

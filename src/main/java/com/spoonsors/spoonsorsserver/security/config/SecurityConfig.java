@@ -1,4 +1,4 @@
-package com.spoonsors.spoonsorsserver.loginInfra;
+package com.spoonsors.spoonsorsserver.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
