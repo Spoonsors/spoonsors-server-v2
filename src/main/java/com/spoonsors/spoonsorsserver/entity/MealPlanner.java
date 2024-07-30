@@ -2,15 +2,17 @@ package com.spoonsors.spoonsorsserver.entity;
 
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 
-@ToString
-@Setter
 @Getter
-@SuperBuilder
 @Entity
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MealPlanner extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,4 +57,7 @@ public class MealPlanner extends BaseEntity {
     @Column(length = 10)
     private String level;
 
+    public void delete(){
+        this.deletedYn=true;
+    }
 }

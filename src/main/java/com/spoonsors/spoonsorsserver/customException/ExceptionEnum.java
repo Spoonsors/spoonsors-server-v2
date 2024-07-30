@@ -48,7 +48,9 @@ public enum ExceptionEnum {
     PAY01(HttpStatus.BAD_GATEWAY, "PAY-01", "결제 요청 실패"),
     PAY02(HttpStatus.BAD_GATEWAY, "PAY-02", "결제 실패"),
 
-    PUSH01(HttpStatus.BAD_REQUEST, "PUSH-01", "state가 올바르지 않습니다.");
+    PUSH01(HttpStatus.BAD_REQUEST, "PUSH-01", "state가 올바르지 않습니다."),
+
+    MEALPLANNERNOTFOUND(HttpStatus.NOT_FOUND, "MEALPLANNER-01", "식단을 찾을 수 없습니다.");
 
 
     private final HttpStatus status;

@@ -40,7 +40,7 @@ public class SwaggerConfig {
     //TODO: 그룹핑 리팩토링 필요
     @Bean
     public GroupedOpenApi benefitGroup() {
-        String[] paths = {"/bMember/**"};
+        String[] paths = {"/bMember/**", "/mealplanners/**"};
 
         return GroupedOpenApi.builder()
                 .group("수혜자 API")
@@ -48,8 +48,17 @@ public class SwaggerConfig {
                 .build();
     }
     @Bean
+    public GroupedOpenApi sponsorGroup() {
+        String[] paths = {"/sMember/**"};
+
+        return GroupedOpenApi.builder()
+                .group("후원자 API")
+                .pathsToMatch(paths)
+                .build();
+    }
+    @Bean
     public GroupedOpenApi userGroup() {
-        String[] paths = {"/member"};
+        String[] paths = {"/member/**"};
 
         return GroupedOpenApi.builder()
                 .group("전체 사용자 API")
@@ -58,10 +67,10 @@ public class SwaggerConfig {
     }
     @Bean
     public GroupedOpenApi adminGroup() {
-        String[] paths = {"/manager"};
+        String[] paths = {"/manager/**", "/nutritionist/**"};
 
         return GroupedOpenApi.builder()
-                .group("관리자 API")
+                .group("관리자 & 영양사 API")
                 .pathsToMatch(paths)
                 .build();
     }
