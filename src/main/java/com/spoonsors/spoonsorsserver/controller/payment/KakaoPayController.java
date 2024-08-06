@@ -6,69 +6,76 @@ import com.spoonsors.spoonsorsserver.entity.payment.ApproveRequestPayDto;
 import com.spoonsors.spoonsorsserver.entity.payment.PaymentDto;
 import com.spoonsors.spoonsorsserver.service.payment.KakaoPayService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-@Slf4j
 @RestController
+@RequestMapping("/payments/kakao")
 @RequiredArgsConstructor
 public class KakaoPayController {
 
     private final KakaoPayService kakaoPayService;
     private final SponService sponService;
 
-    // 카카오페이결제 요청
-    @PostMapping("/sMember/kakaoPay")
-    public ResponseEntity<?> payReady(@RequestBody PaymentDto paymentDto){
+    @Operation(summary = "카카오페이 결제 요청", description = "후원 물품을 위한 카카오페이 결제 요청을 수행합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "결제 요청 성공"),
+            @ApiResponse(responseCode = "400", description = "후원 가능한 상태가 아님 또는 결제 요청 실패")
+    })
+    @PostMapping()
+    public ResponseEntity<String> payReady(@RequestBody PaymentDto paymentDto) {
         List<Long> sponList = paymentDto.getSpon_list();
-        String txt="";
+        String txt;
 
-        //후원 가능한 상태인지 확인
-        for (Long spon_id : sponList) {
-            txt = sponService.checkSpon(spon_id);
-            if (txt.equals("이미 후원이 완료된 물품입니다.")) {
+        // 후원 가능한 상태인지 확인
+        for (Long sponId : sponList) {
+            txt = sponService.checkSpon(sponId);
+            if ("이미 후원이 완료된 물품입니다.".equals(txt)) {
                 throw new ApiException(ExceptionEnum.SPON01);
             }
         }
 
-        String link= kakaoPayService.payReady(paymentDto);
-        if(link.equals("결제 요청 실패")){
-            throw new ApiException(ExceptionEnum.PAY01); //결제 요청 실패
+        String link = kakaoPayService.payReady(paymentDto);
+        if ("결제 요청 실패".equals(link)) {
+            throw new ApiException(ExceptionEnum.PAY01); // 결제 요청 실패
         }
-        return ResponseEntity.status(HttpStatus.OK).body(link);
-
-
+        return ResponseEntity.ok(link);
     }
 
-    //결제 완료
-    @GetMapping("/sMember/kakaoPay/completed")
-    public ResponseEntity<?>  kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
-        ApproveRequestPayDto approveRequestPayDto = kakaoPayService.payApprove(pg_token);
-        if(approveRequestPayDto!=null){
-            //스폰 내역 저장
+    @Operation(summary = "결제 완료", description = "카카오페이 결제 완료 후 호출되는 엔드포인트입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "결제 완료"),
+            @ApiResponse(responseCode = "400", description = "결제 실패")
+    })
+    @GetMapping("/complete")
+    public ResponseEntity<String> kakaoPaySuccess(@RequestParam("pg_token") String pgToken) {
+        ApproveRequestPayDto approveRequestPayDto = kakaoPayService.payApprove(pgToken);
+        if (approveRequestPayDto != null) {
+            // 스폰 내역 저장
             sponService.applySpon(approveRequestPayDto.getTid(), approveRequestPayDto.getPartner_user_id());
-            return ResponseEntity.status(HttpStatus.OK).body("결제 완료");
-        }else{
-            throw new ApiException(ExceptionEnum.PAY02); //결제 실패
+            return ResponseEntity.ok("결제 완료");
+        } else {
+            throw new ApiException(ExceptionEnum.PAY02); // 결제 실패
         }
     }
 
-    // 결제 취소시 실행 url
-    @GetMapping("/sMember/kakaoPay/cancel")
-    public String payCancel() {
-        return "결제 취소"; //todo 수정
+    @Operation(summary = "결제 취소", description = "결제 취소 시 호출되는 엔드포인트입니다.")
+    @ApiResponse(responseCode = "200", description = "결제 취소")
+    @GetMapping("/cancel")
+    public ResponseEntity<String> payCancel() {
+        return ResponseEntity.ok("결제 취소");
     }
 
-    // 결제 실패시 실행 url
-    @GetMapping("/sMember/kakaoPay/fail")
-    public String payFail() {
-        throw new ApiException(ExceptionEnum.PAY02); //결제 실패
+    @Operation(summary = "결제 실패", description = "결제 실패 시 호출되는 엔드포인트입니다.")
+    @ApiResponse(responseCode = "400", description = "결제 실패")
+    @GetMapping("/fail")
+    public ResponseEntity<String> payFail() {
+        throw new ApiException(ExceptionEnum.PAY02); // 결제 실패
     }
 }
