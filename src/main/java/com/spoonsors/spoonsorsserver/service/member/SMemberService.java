@@ -5,13 +5,11 @@ import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
 import com.spoonsors.spoonsorsserver.entity.sMember.SMemberSignUpDto;
-import com.spoonsors.spoonsorsserver.security.jwt.JwtTokenProvider;
-import com.spoonsors.spoonsorsserver.repository.BMemberRepository;
+import com.spoonsors.spoonsorsserver.entity.sMember.TokenUpdateReqDto;
 import com.spoonsors.spoonsorsserver.repository.ISMemberRepository;
 import com.spoonsors.spoonsorsserver.repository.IbMemberRepository;
-import com.spoonsors.spoonsorsserver.repository.SMemberRepository;
+import com.spoonsors.spoonsorsserver.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,19 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class SMemberService {
 
     private final ISMemberRepository isMemberRepository;
     private final IbMemberRepository ibMemberRepository;
-    private final BMemberRepository bMemberRepository;
-    private final SMemberRepository sMemberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder encoder;
+
+    @Transactional
     public String signUp(SMemberSignUpDto requestDto) throws Exception {
 
         //존재하는 아이디
@@ -43,20 +39,22 @@ public class SMemberService {
             throw new ApiException(ExceptionEnum.JOIN01);
         }
         //존재하는 닉네임
-        if (bMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
+        if (ibMemberRepository.findByMemberNickname(requestDto.getNickname()).isPresent()){
             throw new ApiException(ExceptionEnum.JOIN02);
         }
-        if (sMemberRepository.findByNickname(requestDto.getNickname()).isPresent()){
+        if (isMemberRepository.findByMemberNickname(requestDto.getNickname()).isPresent()){
             throw new ApiException(ExceptionEnum.JOIN02);
         }
         if (!requestDto.getPwd().equals(requestDto.getPwd_check())){
             throw new ApiException(ExceptionEnum.JOIN03);
         }
 
-        SMember member = isMemberRepository.save(requestDto.toEntity());
+        SMember member = requestDto.toEntity();
         member.encodePassword(passwordEncoder);
 
-        //member.addUserAuthority();
+        // 저장
+        member = isMemberRepository.save(member);
+
         return member.getMemberId();
     }
 
@@ -66,21 +64,20 @@ public class SMemberService {
                 .filter(it -> encoder.matches(members.get("pwd"), it.getMemberPw()))   // 암호화된 비밀번호와 비교하도록 수정
                 .orElseThrow(() -> new ApiException(ExceptionEnum.LOGIN05)); //아이디와 비밀번호 불일치
 
-
         List<String> roles = new ArrayList<>();
         roles.add(sMember.getRole().name());
 
-        LoginDto loginDto = new LoginDto();
-        loginDto.setMember_id(sMember.getMemberId());
-        loginDto.setMember_name(sMember.getMemberName());
-        loginDto.setMember_nickname(sMember.getMemberNickname());
-        loginDto.setMember_phoneNumber(sMember.getMemberPhoneNumber());
-        loginDto.setMember_profilePath((sMember.getProfilePath()));
-        loginDto.setToken(jwtTokenProvider.createToken(sMember.getMemberId(), roles));
-        return loginDto;
+        return LoginDto.builder()
+                .id(sMember.getMemberId())
+                .name(sMember.getMemberName())
+                .nickname(sMember.getMemberNickname())
+                .phoneNumber(sMember.getMemberPhoneNumber())
+                .profilePath(sMember.getProfilePath())
+                .token(jwtTokenProvider.createToken(sMember.getMemberId(), roles)).build();
     }
 
-    public void putToken(Map<String, String> token){
-        sMemberRepository.putToken(token);
+    @Transactional
+    public void putToken(TokenUpdateReqDto token){
+        isMemberRepository.updateToken(token.getMemberId(), token.getToken());
     }
 }

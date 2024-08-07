@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -45,9 +44,5 @@ public class SMemberRepository {
                 .setParameter("pwd",pwd)
                 .executeUpdate();
 
-    }
-    public void putToken(Map<String, String> token){
-        SMember sMember = em.find(SMember.class, token.get("id"));
-        sMember.setToken(token.get("token"));
     }
 }
