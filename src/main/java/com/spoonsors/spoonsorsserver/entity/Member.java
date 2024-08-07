@@ -3,6 +3,7 @@ package com.spoonsors.spoonsorsserver.entity;
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,9 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Setter
 @SuperBuilder
 @MappedSuperclass
+@NoArgsConstructor
 public abstract class Member extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(length = 100, nullable = false)
     private String memberId;
 

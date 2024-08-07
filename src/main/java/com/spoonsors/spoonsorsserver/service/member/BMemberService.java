@@ -71,15 +71,14 @@ public class BMemberService {
         List<String> roles = new ArrayList<>();
         roles.add(bMember.getRole().name());
 
-        LoginDto loginDto = new LoginDto();
-        loginDto.setMember_id(bMember.getMemberId());
-        loginDto.setMember_name(bMember.getMemberName());
-        loginDto.setMember_nickname(bMember.getMemberNickname());
-        loginDto.setMember_address(bMember.getBMemberAddress());
-        loginDto.setMember_phoneNumber(bMember.getMemberPhoneNumber());
-        loginDto.setMember_profilePath((bMember.getProfilePath()));
-        loginDto.setToken(jwtTokenProvider.createToken(bMember.getMemberId(), roles));
-        return loginDto;
+        return LoginDto.builder()
+                .id(bMember.getMemberId())
+                .name(bMember.getMemberName())
+                .nickname(bMember.getMemberNickname())
+                .phoneNumber(bMember.getMemberPhoneNumber())
+                .profilePath(bMember.getProfilePath())
+                .address(bMember.getBMemberAddress())
+                .token(jwtTokenProvider.createToken(bMember.getMemberId(), roles)).build();
     }
 
     public void putToken(Map<String, String> token){

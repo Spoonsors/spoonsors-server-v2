@@ -49,7 +49,7 @@ public class SwaggerConfig {
     }
     @Bean
     public GroupedOpenApi sponsorGroup() {
-        String[] paths = {"/sMember/**"};
+        String[] paths = {"/sMembers/**"};
 
         return GroupedOpenApi.builder()
                 .group("후원자 API")

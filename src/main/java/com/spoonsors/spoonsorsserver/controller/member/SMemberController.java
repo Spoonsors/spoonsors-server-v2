@@ -2,12 +2,14 @@ package com.spoonsors.spoonsorsserver.controller.member;
 
 import com.spoonsors.spoonsorsserver.entity.login.LoginDto;
 import com.spoonsors.spoonsorsserver.entity.sMember.SMemberSignUpDto;
+import com.spoonsors.spoonsorsserver.entity.sMember.TokenUpdateReqDto;
 import com.spoonsors.spoonsorsserver.entity.spon.SponDto;
 import com.spoonsors.spoonsorsserver.service.member.SMemberService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class SMemberController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청")
     })
     @PostMapping
-    public ResponseEntity<String> join(@RequestBody SMemberSignUpDto dto) throws Exception {
+    public ResponseEntity<String> join(@Valid @RequestBody SMemberSignUpDto dto) throws Exception {
         String id = sMemberService.signUp(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(id + " 회원가입 완료");
     }
@@ -51,7 +53,7 @@ public class SMemberController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청")
     })
     @PutMapping("/token")
-    public ResponseEntity<String> putToken(@RequestBody Map<String, String> token) {
+    public ResponseEntity<String> putToken(@RequestBody TokenUpdateReqDto token) {
         sMemberService.putToken(token);
         return ResponseEntity.ok("완료");
     }
