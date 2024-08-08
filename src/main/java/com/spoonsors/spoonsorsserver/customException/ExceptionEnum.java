@@ -27,6 +27,7 @@ public enum ExceptionEnum {
     AUTHORIZE02(HttpStatus.BAD_REQUEST, "AUTHORIZE-02","세션이 만료되었습니다."),
 
     SPON01(HttpStatus.FORBIDDEN, "SPON-01","이미 후원이 완료된 물품입니다."),
+    SPON02(HttpStatus.BAD_REQUEST, "SPON-02","존재하지 않는후원입니다."),
 
     POST01(HttpStatus.FORBIDDEN, "POST-01", "인증이 되지 않은 사용자입니다."),
     POST02(HttpStatus.FORBIDDEN, "POST-02", "후원 등록 가능 상태가 아닙니다."),
@@ -34,6 +35,7 @@ public enum ExceptionEnum {
     POST04(HttpStatus.FORBIDDEN, "POST-04", "후원 완료된 글은 삭제 불가능 합니다."),
     POST05(HttpStatus.FORBIDDEN, "POST-05", "후원된 상품이 있는 글은 삭제 불가능 합니다."),
     POST06(HttpStatus.FORBIDDEN, "POST-06", "리뷰가 있는 글은 상태 변경 불가능 합니다."),
+    POST07(HttpStatus.BAD_REQUEST, "POST-07", "올바르지 않은 글입니다."),
 
     JOIN01(HttpStatus.BAD_REQUEST, "JOIN-01", "이미 존재하는 아이디입니다."),
     JOIN02(HttpStatus.BAD_REQUEST, "JOIN-02", "이미 존재하는 닉네임입니다."),
@@ -47,10 +49,13 @@ public enum ExceptionEnum {
 
     PAY01(HttpStatus.BAD_GATEWAY, "PAY-01", "결제 요청 실패"),
     PAY02(HttpStatus.BAD_GATEWAY, "PAY-02", "결제 실패"),
+    PAY03(HttpStatus.BAD_GATEWAY, "PAY-03", "결제 정보를 찾을 수 없음"),
 
     PUSH01(HttpStatus.BAD_REQUEST, "PUSH-01", "state가 올바르지 않습니다."),
 
-    MEALPLANNERNOTFOUND(HttpStatus.NOT_FOUND, "MEALPLANNER-01", "식단을 찾을 수 없습니다.");
+    MEALPLANNERNOTFOUND(HttpStatus.NOT_FOUND, "MEALPLANNER-01", "식단을 찾을 수 없습니다."),
+
+    MEMBER01(HttpStatus.BAD_REQUEST, "MEMBER-01", "사용자를 찾을 수 없습니다.");
 
 
     private final HttpStatus status;

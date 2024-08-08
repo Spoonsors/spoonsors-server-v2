@@ -127,4 +127,12 @@ public class PostService {
         Post post = optionalPost.get();
         return post.isHasReview();
     }
+
+    public void changeRemain(Long postId, int sponAmount){
+        Post post = iPostRepository.findById(postId).orElseThrow(() -> new ApiException(ExceptionEnum.POST07));
+        postRepository.changeRemain(postId, sponAmount);
+        if(post.getRemainSpon()==0){ //더이상 남은 후원이 없으면 글 완료 처리
+            postRepository.changeState(post.getPostId());
+        }
+    }
 }

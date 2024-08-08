@@ -2,6 +2,7 @@ package com.spoonsors.spoonsorsserver.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
@@ -21,6 +22,7 @@ import java.util.List;
                 )
         }
 )
+@NoArgsConstructor(force = true)
 public class BMember extends Member {
     @Column(name = "b_member_birth", nullable = false)
     private LocalDate bMemberBirth;

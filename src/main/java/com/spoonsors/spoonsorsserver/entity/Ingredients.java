@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @Entity
+@NoArgsConstructor(force = true)
 public class Ingredients extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
