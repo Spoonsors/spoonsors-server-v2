@@ -6,19 +6,26 @@ import com.spoonsors.spoonsorsserver.entity.payment.ApproveRequestPayDto;
 import com.spoonsors.spoonsorsserver.entity.payment.PaymentDto;
 import com.spoonsors.spoonsorsserver.entity.payment.RequestPayDto;
 import com.spoonsors.spoonsorsserver.entity.spon.SponInfoDto;
+import com.spoonsors.spoonsorsserver.entity.spon.SponTidDto;
 import com.spoonsors.spoonsorsserver.service.payment.KakaoPayService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/payments/kakao")
 @RequiredArgsConstructor
 public class KakaoPayController {
+
+    private final RedisTemplate<String, Object> redisTemplate;
+    private static final String PREFIX = "kakaoPay:";
 
     private final KakaoPayService kakaoPayService;
     private final SponService sponService;
@@ -37,7 +44,10 @@ public class KakaoPayController {
         RequestPayDto requestPayDto = kakaoPayService.payReady(paymentDto.getMemberId(), sponInfoDto);
 
         if (requestPayDto != null && requestPayDto.getNext_redirect_app_url() != null) {
-            sponService.updateTid(requestPayDto.getTid(), paymentDto.getSpons());
+            // Redis에 저장
+            SponTidDto sponTidDto = SponTidDto.builder().tid(requestPayDto.getTid()).spons(paymentDto.getSpons()).memberId(paymentDto.getMemberId()).build();
+            String key = PREFIX + requestPayDto.getSMemberId();
+            redisTemplate.opsForValue().set(key,sponTidDto, 5, TimeUnit.MINUTES);
             return ResponseEntity.ok(requestPayDto.getNext_redirect_app_url());
         }
 
@@ -51,12 +61,26 @@ public class KakaoPayController {
     })
     @GetMapping("/complete")
     public ResponseEntity<String> kakaoPaySuccess(@RequestParam("pg_token") String pgToken) {
-        ApproveRequestPayDto approveRequestPayDto = kakaoPayService.payApprove(pgToken);
+        String sMemberId = "id1"; //TODO: 로그인 아이디 정보 가져오기
+        String key = PREFIX + sMemberId;
+        SponTidDto sponTidDto = (SponTidDto) redisTemplate.opsForValue().get(key);
+
+        if (sponTidDto == null) {
+            throw new ApiException(ExceptionEnum.PAY03);
+        }
+
+        String tid = sponTidDto.getTid();
+        ApproveRequestPayDto approveRequestPayDto = kakaoPayService.payApprove(pgToken, tid, sMemberId);
         if (approveRequestPayDto != null) {
             // 스폰 내역 저장
-            sponService.applySpon(approveRequestPayDto.getTid(), approveRequestPayDto.getPartner_user_id());
+            sponService.applySpon(approveRequestPayDto.getTid(), sponTidDto.getSpons(),approveRequestPayDto.getPartner_user_id());
+
+            // Redis에서 데이터 삭제
+            redisTemplate.delete(key);
             return ResponseEntity.ok("결제 완료");
         } else {
+
+            redisTemplate.delete(key);
             throw new ApiException(ExceptionEnum.PAY02); // 결제 실패
         }
     }
@@ -65,6 +89,10 @@ public class KakaoPayController {
     @ApiResponse(responseCode = "200", description = "결제 취소")
     @GetMapping("/cancel")
     public ResponseEntity<String> payCancel() {
+        String sMemberId = "id1"; //TODO: 로그인 아이디 정보 가져오기
+        String key = PREFIX + sMemberId;
+        // Redis에서 데이터 삭제
+        redisTemplate.delete(key);
         return ResponseEntity.ok("결제 취소");
     }
 
@@ -72,6 +100,10 @@ public class KakaoPayController {
     @ApiResponse(responseCode = "400", description = "결제 실패")
     @GetMapping("/fail")
     public ResponseEntity<String> payFail() {
+        String sMemberId = "id1"; //TODO: 로그인 아이디 정보 가져오기
+        String key = PREFIX + sMemberId;
+        // Redis에서 데이터 삭제
+        redisTemplate.delete(key);
         throw new ApiException(ExceptionEnum.PAY02); // 결제 실패
     }
 }

@@ -3,6 +3,7 @@ package com.spoonsors.spoonsorsserver.entity;
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @SuperBuilder
 @Entity
+@NoArgsConstructor(force = true)
 public class Post extends BaseEntity {
 
     @Id

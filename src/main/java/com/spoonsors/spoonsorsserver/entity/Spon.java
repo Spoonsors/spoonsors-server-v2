@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Getter
 @SuperBuilder
 @Entity
+@NoArgsConstructor(force = true)
 public class Spon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용

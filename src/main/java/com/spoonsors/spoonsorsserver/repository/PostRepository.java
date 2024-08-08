@@ -14,9 +14,9 @@ public class PostRepository {
 
     private final EntityManager em;
 
-    public void changeRemain(Long post_id){
+    public void changeRemain(Long post_id, int sponAmount){
         Post post = em.find(Post.class, post_id);
-        post.setRemainSpon(post.getRemainSpon()-1);
+        post.setRemainSpon(post.getRemainSpon()-sponAmount);
     }
 
     public String changeState(Long post_id){

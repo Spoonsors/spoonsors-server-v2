@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 public class KakaoPayService {
 
     private ApproveRequestPayDto approveRequestPayDto;
-    private RequestPayDto requestPayDto;
 
     @Transactional
     public RequestPayDto payReady(String memberId, SponInfoDto sponInfoDto) {
@@ -36,9 +35,9 @@ public class KakaoPayService {
         parameters.add("quantity", String.valueOf(sponInfoDto.getQuantity()));
         parameters.add("total_amount", String.valueOf(sponInfoDto.getTotalPrice()));
         parameters.add("tax_free_amount", "0");
-        parameters.add("approval_url", "http://15.165.106.139:8080/sMember/kakaoPay/completed"); // 결제승인시 넘어갈 url
-        parameters.add("cancel_url", "http://15.165.106.139:8080/sMember/kakaoPay/cancel"); // 결제취소시 넘어갈 url
-        parameters.add("fail_url", "http://15.165.106.139:8080/sMember/kakaoPay/fail"); // 결제 실패시 넘어갈 url
+        parameters.add("approval_url", "https://localhost:8080/payments/kakao/complete"); // 결제승인시 넘어갈 url
+        parameters.add("cancel_url", "https://localhost:8080/payments/kakao/cancel"); // 결제취소시 넘어갈 url
+        parameters.add("fail_url", "https://localhost:8080/payments/kakao/fail"); // 결제 실패시 넘어갈 url
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
         // 외부url요청 통로 열기.
@@ -61,14 +60,15 @@ public class KakaoPayService {
     }
 
     // 결제 승인요청 메서드
-    public ApproveRequestPayDto payApprove( String pgToken) {
+    @Transactional
+    public ApproveRequestPayDto payApprove( String pgToken, String tid, String sMemberId) {
         log.info("----------------------------payApprove" );
 
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", "TC0ONETIME"); //가맹점 코드. 10자 실제 제휴 후 받아야함
-        parameters.add("tid", requestPayDto.getTid()); //결제 고유번호
+        parameters.add("tid", tid); //결제 고유번호
         parameters.add("partner_order_id", "partner_order_id"); // 가맹점 주문번호, 결제 준비 api요청과 일치 필요
-        parameters.add("partner_user_id", requestPayDto.getSMemberId() ); //가맹점 회원 id, 결제 준비 api 요청과 일치
+        parameters.add("partner_user_id", sMemberId ); //가맹점 회원 id, 결제 준비 api 요청과 일치
         parameters.add("pg_token", pgToken);
 
         // 하나의 map안에 header와 parameter값을 담아줌.

@@ -9,6 +9,7 @@ import com.spoonsors.spoonsorsserver.entity.Spon;
 import com.spoonsors.spoonsorsserver.entity.spon.SponDto;
 import com.spoonsors.spoonsorsserver.entity.spon.SponInfoDto;
 import com.spoonsors.spoonsorsserver.repository.*;
+import com.spoonsors.spoonsorsserver.service.member.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +25,7 @@ import java.util.Optional;
 public class SponService {
 
     private final ManagerRepository managerRepository;
-    private final SponRepository sponRepository;
-    private final PostRepository postRepository;
+    private final PostService postService;
     private final IPostRepository iPostRepository;
     private final ISponRepository iSponRepository;
     private final ISMemberRepository iSMemberRepository;
@@ -50,35 +50,17 @@ public class SponService {
     }
 
     //후원 신청(후원자)
-   public String applySpon(String tid, String sMemberId){
+   public String applySpon(String tid, List<Long> spons, String sMemberId){
 
-       List <Spon> sponList = sponRepository.findByTid(tid);
-
-        Optional<SMember> optionalSMember = iSMemberRepository.findById(sMemberId);
-        SMember sMember = optionalSMember.get();
-
-        for(int i=0;i<sponList.size();i++){
-            Post post = sponList.get(i).getPost();
-            Spon spon2=Spon.builder()
-                    .sponId(sponList.get(i).getSponId())
-                    .sponDate(LocalDate.now())
-                    .ingredients(sponList.get(i).getIngredients())
-                    .sMember(sMember)
-                    .post(post)
-                    .isSponed(true)
-                    .tid(tid)
-                    .build();
-
-            iSponRepository.save(spon2);
-
-            postRepository.changeRemain(post.getPostId());
-            //자동으로 post상태 바꿔주는 코드
-            if(post.getRemainSpon()==0){ //더이상 남은 후원이 없으면 글 완료 처리
-                postRepository.changeState(post.getPostId());
-            }
+        for (Long sponId : spons) {
+            iSponRepository.updateSpon(tid, sponId, LocalDate.now(), sMemberId);
         }
 
-       return "후원 완료";
+        Spon spon = iSponRepository.findById(spons.get(0)).get();
+        postService.changeRemain(spon.getPost().getPostId(), spons.size());
+
+
+        return "후원 완료";
    }
 
    // 결제용 후원 정보 생성
@@ -123,11 +105,5 @@ public class SponService {
         return sponDtos;
     }
 
-    // 결제 정보 업데이트
-    public void updateTid(String tid, List<Long> spons){
-        for (Long sponId : spons) {
-            iSponRepository.updateTid(tid, sponId);
-        }
-    }
 
 }
