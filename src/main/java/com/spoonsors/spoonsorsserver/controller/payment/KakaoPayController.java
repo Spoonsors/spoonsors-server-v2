@@ -4,6 +4,8 @@ import com.spoonsors.spoonsorsserver.customException.ApiException;
 import com.spoonsors.spoonsorsserver.customException.ExceptionEnum;
 import com.spoonsors.spoonsorsserver.entity.payment.ApproveRequestPayDto;
 import com.spoonsors.spoonsorsserver.entity.payment.PaymentDto;
+import com.spoonsors.spoonsorsserver.entity.payment.RequestPayDto;
+import com.spoonsors.spoonsorsserver.entity.spon.SponInfoDto;
 import com.spoonsors.spoonsorsserver.service.payment.KakaoPayService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,8 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/payments/kakao")
@@ -30,22 +30,18 @@ public class KakaoPayController {
     })
     @PostMapping()
     public ResponseEntity<String> payReady(@RequestBody PaymentDto paymentDto) {
-        List<Long> sponList = paymentDto.getSpon_list();
-        String txt;
 
-        // 후원 가능한 상태인지 확인
-        for (Long sponId : sponList) {
-            txt = sponService.checkSpon(sponId);
-            if ("이미 후원이 완료된 물품입니다.".equals(txt)) {
-                throw new ApiException(ExceptionEnum.SPON01);
-            }
+        // 후원 결제 정보 생성
+        SponInfoDto sponInfoDto = sponService.getSponInfo(paymentDto.getSpons());
+
+        RequestPayDto requestPayDto = kakaoPayService.payReady(paymentDto.getMemberId(), sponInfoDto);
+
+        if (requestPayDto != null && requestPayDto.getNext_redirect_app_url() != null) {
+            sponService.updateTid(requestPayDto.getTid(), paymentDto.getSpons());
+            return ResponseEntity.ok(requestPayDto.getNext_redirect_app_url());
         }
 
-        String link = kakaoPayService.payReady(paymentDto);
-        if ("결제 요청 실패".equals(link)) {
-            throw new ApiException(ExceptionEnum.PAY01); // 결제 요청 실패
-        }
-        return ResponseEntity.ok(link);
+        throw new ApiException(ExceptionEnum.PAY01); // 결제 요청 실패에 대한 예외 처리
     }
 
     @Operation(summary = "결제 완료", description = "카카오페이 결제 완료 후 호출되는 엔드포인트입니다.")

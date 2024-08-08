@@ -27,6 +27,7 @@ public enum ExceptionEnum {
     AUTHORIZE02(HttpStatus.BAD_REQUEST, "AUTHORIZE-02","세션이 만료되었습니다."),
 
     SPON01(HttpStatus.FORBIDDEN, "SPON-01","이미 후원이 완료된 물품입니다."),
+    SPON02(HttpStatus.BAD_REQUEST, "SPON-02","존재하지 않는후원입니다."),
 
     POST01(HttpStatus.FORBIDDEN, "POST-01", "인증이 되지 않은 사용자입니다."),
     POST02(HttpStatus.FORBIDDEN, "POST-02", "후원 등록 가능 상태가 아닙니다."),

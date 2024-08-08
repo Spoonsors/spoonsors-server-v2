@@ -10,6 +10,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class PaymentDto {
-    String member_id;
-    List<Long> spon_list;
+    String memberId;
+    List<Long> spons;
 }

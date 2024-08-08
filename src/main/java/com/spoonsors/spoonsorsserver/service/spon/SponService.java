@@ -7,6 +7,7 @@ import com.spoonsors.spoonsorsserver.entity.Post;
 import com.spoonsors.spoonsorsserver.entity.SMember;
 import com.spoonsors.spoonsorsserver.entity.Spon;
 import com.spoonsors.spoonsorsserver.entity.spon.SponDto;
+import com.spoonsors.spoonsorsserver.entity.spon.SponInfoDto;
 import com.spoonsors.spoonsorsserver.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -80,18 +81,26 @@ public class SponService {
        return "후원 완료";
    }
 
-    //후원 상태 확인
-    public String checkSpon(Long spon_id){
-        Optional<Spon> optionalSpon= iSponRepository.findById(spon_id);
-        Spon spon = optionalSpon.get();
+   // 결제용 후원 정보 생성
+    public SponInfoDto getSponInfo(List<Long> sponIds) {
+        String itemName = "";
+        int totalPrice = 0;
 
-        //후원이 완료된 물품일 경우 오류
-        if(spon.isSponed()){
-            throw new ApiException(ExceptionEnum.SPON01);
+        for (Long sponId : sponIds) {
+            Spon spon = iSponRepository.findById(sponId).orElseThrow( () -> new ApiException(ExceptionEnum.SPON02));
+            Ingredients ingredients = spon.getIngredients();
+            itemName = ingredients.getIngredientsName();
+            totalPrice += ingredients.getPrice();
         }
 
-        return "후원 가능";
+        int quantity = sponIds.size() - 1;
+        if (sponIds.size() != 1) {
+            itemName = itemName + "외 " + quantity + "건";
+        }
+
+        return SponInfoDto.builder().quantity(quantity).itemName(itemName).totalPrice(totalPrice).build();
     }
+
    //후원 내역
     public List<SponDto> getSponList(String sMemberId){
         Optional<SMember> optionalSMember = iSMemberRepository.findById(sMemberId);
@@ -112,6 +121,13 @@ public class SponService {
             sponDtos.add(sponItem);
         }
         return sponDtos;
+    }
+
+    // 결제 정보 업데이트
+    public void updateTid(String tid, List<Long> spons){
+        for (Long sponId : spons) {
+            iSponRepository.updateTid(tid, sponId);
+        }
     }
 
 }
