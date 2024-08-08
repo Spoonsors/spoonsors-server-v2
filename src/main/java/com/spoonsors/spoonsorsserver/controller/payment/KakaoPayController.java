@@ -36,7 +36,7 @@ public class KakaoPayController {
             @ApiResponse(responseCode = "400", description = "후원 가능한 상태가 아님 또는 결제 요청 실패")
     })
     @PostMapping()
-    public ResponseEntity<String> payReady(@RequestBody PaymentDto paymentDto) {
+    public ResponseEntity<RequestPayDto> payReady(@RequestBody PaymentDto paymentDto) {
 
         // 후원 결제 정보 생성
         SponInfoDto sponInfoDto = sponService.getSponInfo(paymentDto.getSpons());
@@ -48,7 +48,7 @@ public class KakaoPayController {
             SponTidDto sponTidDto = SponTidDto.builder().tid(requestPayDto.getTid()).spons(paymentDto.getSpons()).memberId(paymentDto.getMemberId()).build();
             String key = PREFIX + requestPayDto.getSMemberId();
             redisTemplate.opsForValue().set(key,sponTidDto, 5, TimeUnit.MINUTES);
-            return ResponseEntity.ok(requestPayDto.getNext_redirect_app_url());
+            return ResponseEntity.ok(requestPayDto);
         }
 
         throw new ApiException(ExceptionEnum.PAY01); // 결제 요청 실패에 대한 예외 처리
