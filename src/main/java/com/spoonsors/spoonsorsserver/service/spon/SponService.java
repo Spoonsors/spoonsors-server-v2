@@ -21,21 +21,18 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class SponService {
 
-    private final ManagerRepository managerRepository;
+    private final IManagerRepository iManagerRepository;
     private final PostService postService;
-    private final IPostRepository iPostRepository;
     private final ISponRepository iSponRepository;
     private final ISMemberRepository iSMemberRepository;
 
     //후원 요청(자립준비청년)
-    public void addSpon(List<String> itemlist, Long postId){
+    @Transactional
+    public void addSpon(List<String> itemlist, Post post){
         for (String s : itemlist) {
-            Ingredients ingredient = managerRepository.findByName(s).get();
-            Optional<Post> optionalPost = iPostRepository.findById(postId);
-            Post post = optionalPost.get();
+            Ingredients ingredient = iManagerRepository.findByIngredientsName(s).orElseThrow(() -> new ApiException(ExceptionEnum.INGREDIENTS_NOT_FOUND));
 
             Spon spon = Spon.builder()
                     .sponDate(null)

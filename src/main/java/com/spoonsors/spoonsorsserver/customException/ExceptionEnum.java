@@ -55,6 +55,8 @@ public enum ExceptionEnum {
 
     MEALPLANNERNOTFOUND(HttpStatus.NOT_FOUND, "MEALPLANNER-01", "식단을 찾을 수 없습니다."),
 
+    INGREDIENTS_NOT_FOUND(HttpStatus.NOT_FOUND, "INGREDIENTS-01", "식재료를 찾을 수 없습니다."),
+
     MEMBER01(HttpStatus.BAD_REQUEST, "MEMBER-01", "사용자를 찾을 수 없습니다.");
 
 
