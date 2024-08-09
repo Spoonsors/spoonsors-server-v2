@@ -1,5 +1,6 @@
 package com.spoonsors.spoonsorsserver.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spoonsors.spoonsorsserver.entity.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(force = true)
 public class Spon extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
     @Column(name = "spon_id", nullable = false)
     private Long sponId;
 
@@ -23,6 +24,7 @@ public class Spon extends BaseEntity {
     @JoinColumn(name="sMember_id",nullable = true)
     private SMember sMember;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;

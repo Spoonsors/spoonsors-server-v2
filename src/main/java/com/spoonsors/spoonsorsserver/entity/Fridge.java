@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 public class Fridge extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) //MySQL의 AUTO_INCREMENT를 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //MySQL의 AUTO_INCREMENT를 사용
     @Column(name = "fridge_id", nullable = false)
     private Long fridgeId;
 

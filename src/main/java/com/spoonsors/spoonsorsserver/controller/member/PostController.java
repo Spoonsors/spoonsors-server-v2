@@ -1,8 +1,10 @@
 package com.spoonsors.spoonsorsserver.controller.member;
 
+import com.spoonsors.spoonsorsserver.entity.BMember;
 import com.spoonsors.spoonsorsserver.entity.Post;
-import com.spoonsors.spoonsorsserver.entity.bMember.ViewPostDto;
-import com.spoonsors.spoonsorsserver.entity.bMember.WritePostDto;
+import com.spoonsors.spoonsorsserver.entity.post.PostsReadResDto;
+import com.spoonsors.spoonsorsserver.entity.post.ViewPostDto;
+import com.spoonsors.spoonsorsserver.entity.post.WritePostDto;
 import com.spoonsors.spoonsorsserver.service.member.PostService;
 import com.spoonsors.spoonsorsserver.service.spon.SponService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,9 +29,9 @@ public class PostController {
     })
     @PostMapping
     public String writePost(@RequestBody WritePostDto writePostDto) {
-        String memberId = "user123"; //TODO:로그인 정보 가져오기
-        Post post=postService.writePost(memberId, writePostDto);
-        sponService.addSpon(writePostDto.getItem_list(), post.getPostId());
+        BMember member = BMember.builder().memberId("user123").isVerified(true).canPost(true).build(); //TODO:로그인 정보 가져오기
+        Post post=postService.writePost(member, writePostDto);
+        sponService.addSpon(writePostDto.getItem_list(), post);
         return "["+post.getPostId()+"]"+ "\""+post.getPostTitle()+"\""+ " 작성 완료";
     }
 
@@ -49,7 +51,7 @@ public class PostController {
             @ApiResponse(responseCode = "200", description = "글 목록 조회 성공")
     })
     @GetMapping("/posts")
-    public List<Post> viewAllPosts(){
+    public List<PostsReadResDto> viewAllPosts(){
         return postService.viewAllPosts();
     }
 
@@ -68,9 +70,9 @@ public class PostController {
             @ApiResponse(responseCode = "200", description = "회원의 글 목록 조회 성공")
     })
     @GetMapping("bMember/posts")
-    public List<Post> viewMyPosts(){
-        String memberId = "user123"; //TODO:로그인 정보 가져오기
-        return postService.viewMyPosts(memberId);
+    public List<PostsReadResDto> viewMyPosts(){
+        BMember member = BMember.builder().memberId("user123").isVerified(true).canPost(true).build(); //TODO:로그인 정보 가져오기
+        return postService.viewMyPosts(member);
     }
 
     @Operation(summary = "글 상태 변경", description = "글의 상태를 변경합니다")
@@ -79,7 +81,7 @@ public class PostController {
             @ApiResponse(responseCode = "404", description = "글을 찾을 수 없음")
     })
     @PostMapping("/bMember/posts/{postId}/state")
-    public String changePostState(@PathVariable Long postId) throws IOException {
+    public String changePostState(@PathVariable Long postId) {
         return postService.changePostState(postId);
     }
 }

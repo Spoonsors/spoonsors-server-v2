@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class MealPlanner extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mealPlanner_id", nullable = false)//MySQL의 AUTO_INCREMENT를 사용
     private Long mealPlannerId;
 
